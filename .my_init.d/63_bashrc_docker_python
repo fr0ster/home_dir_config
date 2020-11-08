@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+alias tensorflow_create='docker run -it -v $HOME/prj/ByLanguage/python_ml:/home/jovyan/work -d -p 127.0.0.1:8888:8888 --name tf -t jupyter/tensorflow-notebook'
+alias tensorflow-gpu_create='nvidia-docker run -it -v $HOME/prj/ByLanguage/python_ml:/home/jovyan/work -d -it -p 127.0.0.1:8888:8888 --name tfgpu -t tensorflow/tensorflow:latest-gpu'
+alias tensorflow-gpu2_create='nvidia-docker run -it -v $HOME/prj/ByLanguage/python_ml:/home/jovyan/work -d -it -p 127.0.0.1:8888:8888 --name tfgpu -t yoheikikuta/nvidia-docker_tensorflow:latest'
+
+alias odoo_db_create='docker run -d -e POSTGRES_USER=odoo -e POSTGRES_PASSWORD=odoo -p 127.0.0.1:5432:5432 --name db postgres:9.4'
+alias odoo10_db_create='docker run -d -e POSTGRES_USER=odoo -e POSTGRES_PASSWORD=odoo --name db10 postgres:9.4'
+alias odoo11_db_create='docker run -d -e POSTGRES_USER=odoo -e POSTGRES_PASSWORD=odoo --name db11 postgres:9.4'
+
+alias odoo_db_psql="docker exec -it db sh -c 'psql --user=odoo --dbname=odoo_dev'"
+
+alias odoo_create='docker run -d -p 8069:8069 --name odoo --link db:db -t odoo'
+alias odoo10_create='docker run -d -v $HOME/prj/ByLanguage/python/odoo/inline_odoo:/mnt/extra-addons -p 127.0.0.1:8070:8069 --name odoo10 --link db10:db -t odoo:10'
+alias odoo11_create='docker run -d -v $HOME/prj/ByLanguage/python/odoo/inline_odoo:/mnt/extra-addons -p 127.0.0.1:8071:8069 --name odoo11 --link db11:db -t odoo'

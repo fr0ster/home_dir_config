@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+
+# set PATH so it includes user's private bin if it exists
+RUBY_BIN_PATH=/home/alex/.gem/ruby/2.5.0/bin/
+if [ -d "$RUBY_BIN_PATH" ] ; then
+    export PATH="$RUBY_BIN_PATH:$PATH"
+fi

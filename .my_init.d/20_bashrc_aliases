@@ -1,0 +1,122 @@
+#!/usr/bin/env bash
+
+alias wakehome='wakeonlan 90:e6:ba:0d:39:fe'
+
+alias myaptupdater='sudo apt-get update && sudo apt upgrade -y'
+
+alias mytmux='tmux attach -t mytmux || tmux new -s mytmux'
+
+alias blackhole='tmux attach -t blackhole || tmux new -s blackhole'
+
+if [ "$OS" = "Linux" ]; then
+  memcount(){
+    free -t | grep Total | awk '{ print $2; }'
+  }
+
+  get_xms() {
+    MEM=`memcount`
+    echo $MEM '/ 4 / 1024' | bc
+  }
+
+  get_xmx() {
+    MEM=`memcount`
+    echo $MEM '/ 2 / 1024' | bc
+}
+fi
+if [ "$OS" = "Darwin" ]; then
+  memcount(){
+    echo '16 * 1024 * 1024' | bc
+  }
+
+  get_xms() {
+    MEM=`memcount`
+    echo $MEM '/ 4 / 1024' | bc
+  }
+
+  get_xmx() {
+    MEM=`memcount`
+    echo $MEM '/ 2 / 1024' | bc
+  }
+fi
+get_java_opts(){
+  XMS=`get_xms`
+  XMX=`get_xmx`
+  JAVA_OPT='-Xms'$XMS'M -Xmx'$XMX'M'
+  echo $JAVA_OPT
+}
+
+JAVA_OPTS=`get_java_opts`
+export JAVA_OPTS
+
+alias weatherhome='curl wttr.in/Железнодорожный'
+alias weatherwork='curl wttr.in/Москва,%20Беговая'
+alias ll='ls -la'
+
+#alias odoo_mount='sshfs odoo_prod:/rcsp/gitmodules "$HOME"/prj/ByLanguage/python/odoo/prod -o reconnect'
+#alias osmc_mount='sshfs osmc:/mnt/sda1 "$HOME"/.sshfs -o reconnect'
+#alias osmc_mount='sshfs osmc:/mnt/sda1 "$HOME"/.sshfs'
+
+alias jupynote8888='jupyter-notebook --port=8888 --no-browser'
+alias jupynote8844='jupyter-notebook --port=8844 --no-browser'
+alias jupynote4444='jupyter-notebook --port=4444 --no-browser'
+
+alias duckgo='links duckduckgo.org'
+
+alias simplehttpd='python3 -m http.server 9000 --bind 127.0.0.1'
+alias pip_update='pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U'
+alias pip3_update='pip3 freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip3 install -U'
+
+# added by Anaconda3 installer
+alias anaconda_path='export PATH=""$HOME"/anaconda3/bin:$PATH"'
+# added by Miniconda3 installer
+alias miniconda_path='export PATH=""$HOME"/miniconda3/bin:$PATH"'
+
+get_cheat_help() {
+  LANG=""
+  QUERY=""
+  OUT=""
+  while [ -n "$1" ]
+  do
+  case "$1" in
+  -l) LANG="$2"
+  shift ;;
+  -q) QUERY="$2"
+  shift ;;
+  -o) OUT="?qT&style=bw -o $2"
+  shift ;;
+  --) shift
+  break ;;
+  *) echo "$1 is not an option";;
+  esac
+  shift
+  done
+
+  curl cheat.sh/$LANG/$QUERY$OUT
+}
+
+searcher() {
+  while [ -n "$1" ]
+  do
+  case "$1" in
+  -p) searchpath="$2"
+  shift ;;
+  -in) incmask="$2"
+  shift ;;
+  -ex) excmask="$2"
+  shift ;;
+  -c) content="$2"
+  shift ;;
+  -w) wordregexp="-w" ;;
+  -x) lineregexp="-x" ;;
+  -n) linenum="-n" ;;
+  --) shift
+  break ;;
+  *) echo "$1 is not an option";;
+  esac
+  shift
+  done
+
+  IFS=""
+  fgrep -r --include=$incmask --exclude=$excmask $content $searchpath $linenum
+}
+

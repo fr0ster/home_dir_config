@@ -1,0 +1,107 @@
+#!/usr/bin/env bash
+
+odootags() {
+  if [ -d /usr/lib/python2.7/dist-packages/odoo ]; then
+    ctags --language-force=python -R . /usr/lib/python2.7/dist-packages/odoo/
+  elif [ -d $1 ]; then
+    ctags --language-force=python -R . $1
+  fi
+}
+pythontags(){
+  ctags --language-force=python $@;
+}
+myjava_prjtags(){
+  ctags --language-force=java $@;
+}
+scalatags(){
+  ctags --language-force=scala $@;
+}
+shelltags(){
+  ctags --language-force=sh $@;
+}
+cdtodirorcreateit() {
+  pushd ~;
+  if [ -d $1 ]; then
+    cd $1;
+  else
+    mkdir -p $1;
+    cd $1;
+  fi
+}
+
+
+mytmuxwithparam() {
+  if [ -f .tmux_env_init.sh  ]; then 
+  tmux new-session -A -s $1 bash --init-file .tmux_env_init.sh;
+ else
+    tmux new-session -A -s $1;
+  fi
+}
+
+cpbymask(){
+  find "${2}" -type f -name "${1}" -print0 | xargs --null cp --parents -t "${3}"
+}
+
+alias opensaptensorprj='cdtodirorcreateit ~/Prj/OpenSAP/TensorFlow'
+
+alias myhtb_challenge='cdtodirorcreateit prj/ByLanguage/hacklab/hackthebox_prj/hackthebox_challenges/ && mytmuxwithparam HTB_Challenge && popd'
+alias myhtb_machines='cdtodirorcreateit prj/ByLanguage/hacklab/hackthebox_prj/hackthebox_machines/ && mytmuxwithparam HTB_Machines && popd'
+
+alias myscala_prj='cdtodirorcreateit prj/ByLanguage/scala_prj/ && mytmuxwithparam scala_prj && popd'
+alias myscala_libs='cdtodirorcreateit prj/ByLanguage/scala/ && mytmuxwithparam scala_libs && popd'
+alias myscala_gui='cdtodirorcreateit prj/ByLanguage/scala_gui/ && mytmuxwithparam scala_gui && popd'
+alias myscala_bookcode='cdtodirorcreateit prj/ByLanguage/scala_bookcode/ && mytmuxwithparam scala_bookcode && popd'
+alias myhaskell_prj='cdtodirorcreateit prj/ByLanguage/haskell/ && mytmuxwithparam haskell_prj && popd'
+
+alias myswift_prj='cdtodirorcreateit prj/ByLanguage/swift_prj/ && mytmuxwithparam swift_prj && popd'
+
+alias myc-c++_bookcode='cdtodirorcreateit prj/ByLanguage/c-c++_bookcode/ && mytmuxwithparam c-c++_bookcode && popd'
+alias myc-c++_prj='cdtodirorcreateit prj/ByLanguage/c-c++_prj/ && mytmuxwithparam c-c++_prj && popd'
+
+alias setgopath='export GOPATH=`pwd`'
+alias unsetgopath='unset GOPATH'
+alias mygo_prj='cdtodirorcreateit prj/ByLanguage/go/ && mytmuxwithparam go_prj && popd'
+
+alias myd_prj='cdtodirorcreateit prj/ByLanguage/d/ && mytmuxwithparam d_prj && popd'
+
+alias myjava_prj='cdtodirorcreateit prj/ByLanguage/java/ && mytmuxwithparam java_prj && popd'
+alias myjs_prj='cdtodirorcreateit prj/ByLanguage/javascript/ && mytmuxwithparam js_prj && popd'
+
+alias myhacklab_prj='cdtodirorcreateit prj/ByLanguage/hacklab/ && mytmuxwithparam hacklab_prj && popd'
+
+alias mypython_ml='cdtodirorcreateit prj/ByLanguage/python_ml/ && mytmuxwithparam python_ml && popd'
+alias mypython_book='cdtodirorcreateit prj/ByLanguage/python_bookcode/ && mytmuxwithparam python_book && popd'
+alias mypython_prj='cdtodirorcreateit prj/ByLanguage/python/ && mytmuxwithparam python_prj && popd'
+alias myodoo_prj='cdtodirorcreateit prj/ByLanguage/python/odoo/ && mytmuxwithparam odoo_prj && popd'
+
+alias myruby_prj='cdtodirorcreateit prj/ByLanguage/ruby/ && mytmuxwithparam ruby_prj && popd'
+alias mysap_prj='cdtodirorcreateit prj/ByLanguage/sap/ && mytmuxwithparam sap_prj && popd'
+alias mysml_prj='cdtodirorcreateit prj/ByLanguage/sml/ && mytmuxwithparam sml_prj && popd'
+alias mysql_prj='cdtodirorcreateit prj/ByLanguage/sql/ && mytmuxwithparam sql_prj && popd'
+alias mycoursera_prj='cdtodirorcreateit prj/ByLanguage/coursera/ && mytmuxwithparam coursera_prj && popd'
+
+alias myrust_bookcode='cdtodirorcreateit prj/ByLanguage/rust_bookcode/ && mytmuxwithparam rust_bookcode && popd'
+alias myrust_embedded='cdtodirorcreateit prj/ByLanguage/rust_embedded/ && mytmuxwithparam rust_embedded && popd'
+alias myrust_prj='cdtodirorcreateit prj/ByLanguage/rust/ && mytmuxwithparam rust_prj && popd'
+
+alias mysml_prj='cdtodirorcreateit prj/ByLanguage/sml/ && mytmuxwithparam sml_prj && popd'
+alias mylisp_prj='cdtodirorcreateit prj/ByLanguage/lisp/ && mytmuxwithparam lisp_prj && popd'
+alias myracket_prj='cdtodirorcreateit prj/ByLanguage/racket/ && mytmuxwithparam racket_prj && popd'
+
+alias myshell_prj='cdtodirorcreateit prj/ByLanguage/shell/ && mytmuxwithparam shell_prj && popd'
+
+alias myembedded_prj='cdtodirorcreateit prj/ByLanguage/embedded/ && mytmuxwithparam embedded_prj && popd'
+alias myti_prj='cdtodirorcreateit prj/ByLanguage/ti/ && mytmuxwithparam ti_prj && popd'
+alias mystm8_prj='cdtodirorcreateit prj/ByLanguage/stm8/ && mytmuxwithparam stm8_prj && popd'
+alias mystm32_prj='cdtodirorcreateit prj/ByLanguage/stm32/ && mytmuxwithparam stm32_prj && popd'
+alias mycm3_prj='cdtodirorcreateit prj/ByLanguage/cm3/ && mytmuxwithparam cm3_prj && popd'
+alias mymbed_prj='cdtodirorcreateit prj/ByLanguage/mbed/ && mytmuxwithparam mbed_prj && popd'
+alias myraspberry_prj='cdtodirorcreateit prj/ByLanguage/raspberry/ && mytmuxwithparam raspberry_prj && popd'
+
+alias mykotlin_bookcode='cdtodirorcreateit prj/ByLanguage/kotlin_bookcode/ && mytmuxwithparam kotlin_bookcode && popd'
+alias mykotlin_prj='cdtodirorcreateit prj/ByLanguage/kotlin_prj/ && mytmuxwithparam kotlin_prj && popd'
+
+alias mygithub_prj='cdtodirorcreateit prj/ByLanguage/github_prj/ && mytmuxwithparam github_prj && popd'
+alias mygitlab_prj='cdtodirorcreateit prj/ByLanguage/gitlab_prj/ && mytmuxwithparam gitlab_prj && popd'
+alias mybitbucket_prj='cdtodirorcreateit prj/ByLanguage/bitbucket_prj/ && mytmuxwithparam bitbucket_prj && popd'
+

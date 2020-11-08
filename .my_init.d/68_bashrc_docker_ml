@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+alias rabbitmq_create='docker run -p 127.0.0.1:4369:4369 -p 127.0.0.1:5671:5671 -p 127.0.0.1:5672:5672 -d --hostname my-rabbit --name some-rabbit rabbitmq'
+
+alias kafka-net_create='docker network create kafka-net'
+alias zookeeper_create='docker run -p 127.0.0.1:2181:2181 -d --name zookeeper --network kafka-net zookeeper:3.4'
+alias kafka_create='docker run -p 127.0.0.1:9092:9092 -d --name kafka --network kafka-net --env ZOOKEEPER_IP=zookeeper ches/kafka'
+
+alias scylla_create='docker run -p 127.0.0.1:7000:7000 -p 127.0.0.1:7001:7001 -p 127.0.0.1:9042:9042 -p 127.0.0.1:9160:9160 -p 127.0.0.1:10000:10000 --name some-scylla -d scylladb/scylla'
+
+alias kafka-mirror_create='docker run --network=kafka-net -i scalawilliam/kafka-mirror \
+  --name kafka-mirror \
+  -Dinput-topic=in \
+  -Doutput-topic=out \
+  -Dakka.kafka.consumer.kafka-clients.group.id=akka \
+  -Dakka.kafka.consumer.kafka-clients.bootstrap.servers=kafka:9092 \
+  -Dakka.kafka.producer.kafka-clients.bootstrap.servers=kafka:9092'
+
+alias sparkshell_create='docker run --name spark-shell -it -h sandbox sequenceiq/spark sh -c spark-shell'
+alias jupyspark_create='docker run --name jupyspark --rm -h 0.0.0.0 -p 127.0.0.1:8888:8888 -e PYTHONHASHSEED=0 jupyter/all-spark-notebook'
+
+alias mongodb_create='docker run -v "$HOME"/prj/ByLanguage/python/mongodb_test/mongodb-persistence:/bitami -d --rm -p 127.0.0.1:27017:27017 --name mongodb bitnami/mongodb:latest'
+
+alias neo4j_create='docker run -t -d --name neo4j \
+  --publish=127.0.0.1:7474:7474 --publish=127.0.0.1:7687:7687 \
+  --env=NEO4J_AUTH=none \
+  --volume=$HOME/prj/ByLanguage/python/neo4j_test/data:/data \
+  neo4j'
+alias neo4jv3_create='docker run -t -d --name neo4j \
+  --publish=127.0.0.1:7474:7474 --publish=127.0.0.1:7687:7687 \
+  --env=NEO4J_AUTH=none \
+  --volume=$HOME/prj/ByLanguage/python/neo4j_v3/data:/data \
+  --volume=$HOME/prj/ByLanguage/python/neo4j_v3/logs:/logs \
+  neo4j:3.0'
+

@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+OS=`uname -s`
+ARCH=`uname -m`
+HOST=`uname -n`
+
+export OS
+
+export PATH=$PATH:~/.npm/bin
+export PATH=~/.local/bin:$PATH
+
+export PATH=~/opt/swift-4.1.2/bin:$PATH
+
+EDITOR=vim
+export EDITOR
+
+export PATH=/usr/local/ti/msp430-gcc/bin:$PATH
+export PATH=/usr/local/ti/msp432-gcc/bin:$PATH
+export PATH=~/opt/crosstool-ng/bin:$PATH
+
+# Add in .bash_localrc all that you wouldn`t like save in Git
+if [ -f ~/.bash_localrc ]; then
+    . ~/.bash_localrc
+fi
+
+eval "$(stack --bash-completion-script stack)"

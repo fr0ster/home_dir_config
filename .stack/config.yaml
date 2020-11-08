@@ -1,0 +1,7 @@
+templates:
+  params:
+    author-email: aleksey.kislitsa@gmail.com
+    author-name: Aleksey Kislitsa
+    category: System
+    copyright: Copyright (c) Aleksey Kislitsa
+    github-username: fr0ster

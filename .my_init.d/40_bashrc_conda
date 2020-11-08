@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+CONDA_ROOT=""
+if [ "$OS" = "Linux" ]; then
+  CONDA_ROOT=$HOME
+fi
+if [ "$OS" = "Darwin" ]; then
+  CONDA_ROOT="/usr/local"
+fi
+alias conda_path='export PATH=""$CONDA_ROOT"/anaconda3/bin:$PATH"'
+alias miniconda_path='export PATH=""$CONDA_ROOT"/miniconda3/bin:$PATH"'
+alias miniconda2_path='export PATH=""$CONDA_ROOT"/miniconda2/bin:$PATH"'
+alias odoo_path='export PATH=""$CONDA_ROOT"/prj/ByLanguage/python/odoo/odoo/:$PATH"'
+
+alias conda_list='"$CONDA_ROOT"/anaconda3/bin/conda env list | grep anaconda'
+alias miniconda_list='"$CONDA_ROOT"/miniconda3/bin/conda env list | grep miniconda'
+alias miniconda2_list='"$CONDA_ROOT"/miniconda2/bin/conda env list | grep miniconda'
+
+conda_set() {
+  source activate $1
+}
+
+alias conda_unset='source deactivate'
+
+odoo_env() {
+  export PYTHONPATH=".:"$HOME"/prj/ByLanguage/python/odoo/odoo/:$PYTHONPATH"
+}
+
+odoo_set() {
+  miniconda_path
+  conda_set odoo_v10
+  export PYTHONPATH=".:"$HOME"/prj/ByLanguage/python/odoo/odoo/:$PYTHONPATH"
+}

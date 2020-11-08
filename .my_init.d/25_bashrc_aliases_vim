@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+alias spacevim_install_all='curl -sLf https://spacevim.org/install.sh | bash -s -- --install '
+alias spacevim_install_vim='curl -sLf https://spacevim.org/install.sh | bash -s -- --install vim'
+alias spacevim_install_nvim='curl -sLf https://spacevim.org/install.sh | bash -s -- --install neovim'
+alias spacevim_uninstall='curl -sLf https://spacevim.org/install.sh | bash -s -- --uninstall'
+
+alias plutovim='nvim -u ~/opt/pluto_vim/vimrc'
+alias ivim='nvim -u ~/opt/vundle_vim/ironvim_vimrc'
+alias avim='nvim -u ~/opt/vundle_vim/anaconda_vimrc'
+alias myvim='nvim -u ~/opt/vundle_vim/myvim_vimrc'
+alias jvim='nvim -u ~/opt/vundle_vim/javavim_vimrc'
+alias svim='nvim -u ~/opt/vundle_vim/scala_vimrc'
+
+alias ensime="ctags -Re . & sbt clean ensimeConfig test:compile ensimeServerIndex"
+
+alias xvfb_start='Xvfb :1 -screen 0 800x600x16 &>/dev/null &'
+alias eclimd_start='DISPLAY=:1 ~/opt/vim_root/eclim_oxigen/eclipse/eclimd -b &>/dev/null'
+

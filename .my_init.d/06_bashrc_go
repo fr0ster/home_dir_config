@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+export GOROOT=/usr/local/go
+export PATH=$GOROOT/bin:$PATH
+
+GO_WS_0001=~/prj/ByLanguage/go/goroot
+GO_PATH_0001=~/prj/ByLanguage/go/goroot/bin
+GO_WS_0002=~/prj/ByLanguage/go/ws_0001
+GO_PATH_0002=~/prj/ByLanguage/go/ws_0001/bin
+export GOPATH=$GO_WS_0001:$GO_WS_0002:$GOROOT:`pwd`
+export PATH=$GO_PATH_0001:$GO_PATH_0002:$PATH

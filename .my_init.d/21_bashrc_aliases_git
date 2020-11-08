@@ -1,0 +1,109 @@
+#!/usr/bin/env bash
+
+alias gs='git status '
+alias ga='git add '
+alias gb='git branch '
+alias gc='git commit'
+alias gd='git diff'
+alias gk='git checkout '
+#alias gk='gitk --all&'
+#alias gx='gitx --all'
+
+alias gf='git flow'
+
+alias got='git '
+alias get='git '
+
+git_addignore() {
+  res=`grep -i '^'"$1"'$' .gitignore`
+  if [ -z "$res" ]; then
+    echo "$@ has been added into .gitignore"
+    echo $@ >> .gitignore
+  else
+    echo "$@ is found in .gitignore"
+    echo $res
+  fi
+}
+git_gitignore_init() {
+  echo '.ensime' > .gitignore
+  echo '.ensime_cache' >> .gitignore
+  echo 'target' >> .gitignore
+  echo '*.log' >> .gitignore
+  echo 'compile_commands.json' >> .gitignore
+  echo 'build' >> .gitignore
+  echo '.tags' >> .gitignore
+  echo 'tags' >> .gitignore
+  echo 'TAGS' >> .gitignore
+}
+alias git_init='find . -type f -exec dos2unix {} \; && git_gitignore_init && git init && ga . && gc -m "Init commit"'
+alias bitbucket_create_as_origin='bitbucket create -c -s git -u fr0ster -w homelabfr0ster `basename $PWD` && git remote add origin git@bitbucket.org:homelabfr0ster/`basename $PWD`.git'
+alias bitbucket_create_as_bibucket='bitbucket create -c -s git -u fr0ster -w homelabfr0ster `basename $PWD` && git remote add bitbucket git@bitbucket.org:homelabfr0ster/`basename $PWD`.git'
+alias bitbucket_add_as_bitbucket='git remote add bitbucket git@bitbucket.org:homelabfr0ster/`basename $PWD`.git'
+alias bitbucket_add_as_origin='git remote add origin git@bitbucket.org:homelabfr0ster/`basename $PWD`.git'
+alias get_git='git remote get-url `get remote`'
+get_branch() {
+  git branch | awk '{print $2}'
+}
+alias git_submodule_add='export GIT_PATH="`basename $PWD`" &&export GIT_NAME="`get_git`" && GIT_BRANCH="`get_branch`" && pushd .. && git submodule add -b $GIT_BRANCH $GIT_NAME $GIT_PATH && git commit -m "Has been added $GIT_NAME -b $GIT_BRANCH" && git_push && popd && unset GIT_NAME && unset GIT_BRANCH && unset GIT_PATH'
+alias git_push='git push -u origin master'
+
+git_update_or_init() {
+  if [ ! -d $2 ]; then
+    git clone -b "$3" "$1" "$2"
+  else
+    cd $2
+    git pull origin "$3"
+    cd ..
+  fi
+}
+
+git_llvm_init() {
+  branch="master"
+  work_dir="llvm"
+  lldb=""
+  runtime=""
+  test_suite=""
+
+  while [ -n "$1" ]
+  do
+  case "$1" in
+  -b) branch="$2"
+  shift ;;
+  -d) work_dir="$2"
+  shift ;;
+  -with-lldb) lldb="Y" ;;
+  -lldb) lldb="Y" ;;
+  -with-runtime) runtime="Y" ;;
+  -rt) runtime="Y" ;;
+  -with-test) test_suite="Y" ;;
+  -ts) test_suite="Y" ;;
+  --) shift
+  break ;;
+  *) echo "$1 is not an option";;
+  esac
+  shift
+  done
+
+  #git_update_or_init "http://llvm.org/git/.git" "" "$branch"
+  pushd .
+  git_update_or_init "http://llvm.org/git/llvm.git" "$work_dir" "$branch"
+  cd $work_dir/tools
+  git_update_or_init "http://llvm.org/git/clang.git" "clang" "$branch"
+  cd ../projects
+  if [ "$runtime" == "Y" ]; then
+    git_update_or_init "http://llvm.org/git/openmp.git" "openmp" "$branch"
+    git_update_or_init "http://llvm.org/git/compiler-rt.git" "compiler-rt" "$branch"
+    git_update_or_init "http://llvm.org/git/libcxx.git" "libcxx" "$branch"
+    git_update_or_init "http://llvm.org/git/libcxxabi.git" "libcxxabi" "$branch"
+    git_update_or_init "http://llvm.org/git/dragonegg.git" "dragonegg" "$branch"
+    git_update_or_init "http://llvm.org/git/libunwind.git" "libunwind" "$branch"
+    git_update_or_init "http://llvm.org/git/parallel-libs.git" "parallel-libs" "$branch"
+  fi
+  if [ "$lldb" == "Y" ]; then
+    git_update_or_init "http://llvm.org/git/lldb.git" "lldb" "$branch"
+  fi
+  if [ "$test_suite" == "Y" ]; then
+    git_update_or_init "http://llvm.org/git/test-suite.git" "test-suite" "$branch"
+  fi
+  popd
+}

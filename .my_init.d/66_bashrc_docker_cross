@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+
+msp_debug() {
+  URL=""
+  BUS=""
+  DEVICE=""
+  COMMAND=""
+  DIR="$PWD"
+  #IMAGE="flowm/msp430-gcc"
+  IMAGE="stapelzeiger/msp430-gcc"
+  while [ -n "$1" ]
+  do
+  case "$1" in
+  -u) URL="$2"
+  shift ;;
+  -b) BUS="$2"
+  shift ;;
+  -d) DEVICE="$2"
+  shift ;;
+  -c) COMMAND="$2"
+  shift ;;
+  -i) IMAGE="$2"
+  shift ;;
+  -i1) IMAGE="stapelzeiger/msp430-gcc"
+  break ;;
+  -i2) IMAGE="flowm/msp430-gcc"
+  break ;;
+  -p) COMMAND="prog /tmp/work/$2"
+  break ;;
+  -w) DIR="$2"
+  shift ;;
+  -h) echo "Using: msp_debug -d /dev/bus/usb/002/002"
+    echo "or msp_debug -b 002 -d 002"
+    echo "or msp_debug -b 002 -d 002 -c 'prog path/to/fimware'"
+    echo "or msp_debug -b 002 -d 002 -p 'path/to/firmware'"
+    echo "or msp_debug -b 002 -d 002 -w work/dir -c 'mspdbug command'"
+    URL=""
+  break ;;
+  -r) docker stop msp_dev && docker rm msp_dev
+  break ;;
+  --) shift
+  break ;;
+  *) echo "$1 is not an option";;
+  esac
+  shift
+  done
+
+  if [ -z $@ ]; then
+    echo "Usage: msp_debug <option>"
+  fi
+
+  if [[ -n "${URL/[ ]*\n/}" ]]; then
+    if [[ -n "${COMMAND/[ ]*\n/}" ]]; then
+      docker run -t -v $DIR:/tmp/work --name msp_dev -i --device="$URL" "$IMAGE" mspdebug tilib "$COMMAND" && docker rm msp_dev
+    else
+      docker run -t -v $DIR:/tmp/work --name msp_dev -i --device="$URL" "$IMAGE" mspdebug tilib && docker rm msp_dev
+    fi
+  elif [[ -n "${BUS/[ ]*\n/}" ]]; then
+    if [[ -n "${COMMAND/[ ]*\n/}" ]]; then
+      docker run -t -v $DIR:/tmp/work --name msp_dev -i --device=/dev/bus/usb/"$BUS"/"$DEVICE" "$IMAGE" mspdebug tilib "$COMMAND" && docker rm msp_dev
+    else
+      docker run -t -v $DIR:/tmp/work --name msp_dev -i --device=/dev/bus/usb/"$BUS"/"$DEVICE" "$IMAGE" mspdebug tilib && docker rm msp_dev
+    fi
+  fi
+}
+
+alias create_rpxc='docker run sdthirlwall/raspberry-pi-cross-compiler:legacy-trusty > rpxc && chmod +x rpxc'
+
+create_dockcross() {
+  if [ -z $@ ]; then
+    echo 'Used: create_dockcross <dockcross docker image>'
+  else
+    docker run --rm dockcross/$@ > ~/opt/bin/dockcross-$@
+    chmod +x ~/opt/bin/dockcross-$@
+  fi
+}
+
+alias docker_ct_andrewd='docker run -it --name ct-ng-andrewd -v "$PWD":/home/user/src -w /home/user/src andrewd/crosstool-ng bash && docker rm ct-ng-andrewd'
+
+docker_ct_firemiles() {
+  docker rm ct-ng-firemiles
+  docker run -it --name ct-ng-firemiles \
+    -v "$PWD":/home/user/src \
+    -w /home/user/src \
+    firemiles/crosstool-ng $@ && \
+    docker rm ct-ng-firemiles
+}
+
+alias docker_ct_walkerlee='docker run -it --name ct-ng-walkerlee -v "$PWD":/home/user/src -w /home/user/src walkerlee/crosstool-ng bash && docker rm ct-ng-walekrlee'

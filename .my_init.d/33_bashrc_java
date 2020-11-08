@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+if [ "$OS" = "Linux" ]; then
+  alias set_java_home='export JAVA_HOME=`get_java_home`'
+  JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
+  export JAVA_HOME
+fi

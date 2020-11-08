@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+alias haskell_install='wget -qO- https://get.haskellstack.org/ | sh'
+alias rust_install='curl https://sh.rustup.rs -sSf | sh'
+
+get_rust_src_path() {
+  echo $(rustc --print sysroot)/lib/rustlib/src/rust/src
+}
+export RUST_SRC_PATH=`get_rust_src_path`
+
+mvn_jdb() {
+  mvn exec:exec -Dexec.executable="jdb" -Dexec.args="-classpath %classpath -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044 $1"
+}
+
+alias mspdebug='LD_LIBRARY_PATH=/usr/local/ti/msp430-gcc/bin mspdebug'
+
